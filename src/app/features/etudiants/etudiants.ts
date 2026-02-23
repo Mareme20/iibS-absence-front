@@ -156,7 +156,7 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
                     <mat-label>Étudiant</mat-label>
                     <mat-select [(ngModel)]="inscription.etudiantId" name="etudiantId">
                       <mat-option *ngFor="let e of etudiants" [value]="e.id">
-                        {{getPrenom(e)}} {{getNom(e)}} ({{e.matricule}})
+                        {{getPrenom(e)}} {{getNom(e)}}  
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
@@ -286,6 +286,7 @@ export class EtudiantsComponent implements OnInit {
         prenom: this.etudiantForm.prenom,
         email: this.etudiantForm.email,
         password: this.etudiantForm.password,
+        matricule: '',
         adresse: this.etudiantForm.adresse
       };
       this.etudiantsFacade.create(payload).subscribe({

@@ -36,6 +36,7 @@ export interface EtudiantCreateDto {
   prenom: string;
   email: string;
   password?: string;
+  matricule?: string;
   adresse: string;
 }
 

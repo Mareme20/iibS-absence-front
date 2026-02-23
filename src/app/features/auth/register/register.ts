@@ -38,9 +38,9 @@ export class RegisterComponent {
 
   protected readonly roles = [
     { label: 'Responsable Pédagogique', value: UserRole.RP },
-    { label: 'Professeur', value: UserRole.PROF },
+    /**{ label: 'Professeur', value: UserRole.PROF },**/
     { label: 'Attaché', value: UserRole.ATTACHE },
-    { label: 'Étudiant', value: UserRole.ETUDIANT }
+    /**{ label: 'Étudiant', value: UserRole.ETUDIANT }**/
   ];
 
   registerForm = this.fb.group({
