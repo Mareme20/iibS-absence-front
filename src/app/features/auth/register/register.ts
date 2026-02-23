@@ -48,8 +48,24 @@ export class RegisterComponent {
     prenom: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
-    role: [UserRole.ETUDIANT as UserRole, [Validators.required]]
+    role: [UserRole.ETUDIANT as UserRole, [Validators.required]],
+    adresse: ['']
   });
+
+  constructor() {
+    this.registerForm.controls.role.valueChanges.subscribe((role) => {
+      const adresseCtrl = this.registerForm.controls.adresse;
+
+      if (role === UserRole.ETUDIANT) {
+        adresseCtrl.setValidators([Validators.required]);
+      } else {
+        adresseCtrl.clearValidators();
+        adresseCtrl.setValue('');
+      }
+
+      adresseCtrl.updateValueAndValidity({ emitEvent: false });
+    });
+  }
 
   onSubmit() {
     if (this.registerForm.invalid) {
@@ -57,7 +73,8 @@ export class RegisterComponent {
       return;
     }
 
-    this.authService.register(this.registerForm.getRawValue()).subscribe({
+    const payload = this.registerForm.getRawValue();
+    this.authService.register(payload).subscribe({
       next: () => {
         this.snackBar.open('Compte créé avec succès. Connectez-vous.', 'Fermer', { duration: 3500 });
         this.router.navigate(['/login']);

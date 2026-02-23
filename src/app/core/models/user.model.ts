@@ -25,6 +25,8 @@ export interface RegisterDto {
   email: string;
   password: string;
   role: UserRole;
+  matricule?: string;
+  adresse?: string;
 }
 
 export interface AuthResponse {

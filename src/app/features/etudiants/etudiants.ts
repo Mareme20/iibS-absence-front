@@ -58,7 +58,7 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
                 </div>
 
                 <div class="form-row">
-                  <mat-form-field appearance="outline">
+                  <mat-form-field appearance="outline" *ngIf="isEditing">
                     <mat-label>Matricule</mat-label>
                     <input matInput [(ngModel)]="etudiantForm.matricule" name="matricule">
                   </mat-form-field>
@@ -67,6 +67,10 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
                     <mat-label>Adresse</mat-label>
                     <input matInput [(ngModel)]="etudiantForm.adresse" name="adresse">
                   </mat-form-field>
+                </div>
+
+                <div class="form-row" *ngIf="!isEditing">
+                  <small>Le matricule est généré automatiquement à la création.</small>
                 </div>
 
                 <div class="form-row">
@@ -246,7 +250,7 @@ export class EtudiantsComponent implements OnInit {
 
   saveEtudiant() {
     if (!this.etudiantForm.nom || !this.etudiantForm.prenom || !this.etudiantForm.email ||
-        !this.etudiantForm.matricule || !this.etudiantForm.adresse) {
+        !this.etudiantForm.adresse || (this.isEditing && !this.etudiantForm.matricule)) {
       this.snackBar.open('Veuillez remplir tous les champs', 'Fermer', { duration: 3000 });
       return;
     }
