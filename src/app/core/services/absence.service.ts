@@ -13,7 +13,7 @@ export class AbsenceService implements IAbsenceService {
   private http = inject(HttpClient);
   private readonly API_URL = `${environment.apiUrl}/absences`;
   private readonly ETUDIANT_URL = `${environment.apiUrl}/etudiants`;
-
+//
   // Pour les étudiants - voir leurs absences
   getMesAbsences(date?: string): Observable<Absence[]> {
     let params = new HttpParams();
