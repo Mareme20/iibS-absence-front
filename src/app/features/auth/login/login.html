@@ -1,0 +1,60 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Connexion</mat-card-title>
+      <mat-card-subtitle>Connectez-vous à votre compte</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input 
+            matInput 
+            type="email" 
+            formControlName="email" 
+            placeholder="exemple@email.com"
+          />
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+            L'email est <strong>requis</strong>
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+            Veuillez entrer un email <strong>valide</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mot de passe</mat-label>
+          <input 
+            matInput 
+            type="password" 
+            formControlName="password" 
+            placeholder="********"
+          />
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            Le mot de passe est <strong>requis</strong>
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+            Le mot de passe doit contenir au moins 
+            <strong>{{loginForm.get('password')?.errors?.['minlength']?.requiredLength}} caractères</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <button 
+          mat-raised-button 
+          color="primary" 
+          type="submit" 
+          [disabled]="loginForm.invalid"
+          class="full-width submit-button"
+        >
+          Se connecter
+        </button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <span style="color:#61727a;font-size:.86rem;padding:0 8px 8px;">Utilisez vos identifiants IIBS pour accéder à la plateforme.</span>
+      <a mat-button routerLink="/register">Créer un compte</a>
+    </mat-card-actions>
+  </mat-card>
+</div>

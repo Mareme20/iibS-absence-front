@@ -1,0 +1,137 @@
+:root {
+  --font-ui: "Outfit", "Manrope", "Avenir Next", "Segoe UI", sans-serif;
+  --font-title: "Space Grotesk", "Outfit", "Avenir Next", sans-serif;
+
+  --bg-1: #f8f6ef;
+  --bg-2: #f1efe7;
+  --surface: rgba(255, 255, 255, 0.78);
+  --surface-strong: #ffffff;
+  --line: rgba(28, 35, 39, 0.12);
+  --text: #1b2328;
+  --muted: #5c6a73;
+
+  --primary: #0f7a6d;
+  --primary-2: #135e56;
+  --accent: #d17f2f;
+  --accent-soft: #f2e2cf;
+  --ok: #2e8b57;
+  --danger: #b23a3a;
+
+  --radius-xl: 22px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --shadow-1: 0 14px 34px rgba(16, 22, 24, 0.08);
+  --shadow-2: 0 6px 14px rgba(14, 20, 24, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-ui);
+  color: var(--text);
+  background:
+    radial-gradient(1300px 700px at -12% -8%, #dbeee6 8%, transparent 56%),
+    radial-gradient(900px 540px at 108% 0%, #f6dec1 8%, transparent 52%),
+    linear-gradient(140deg, var(--bg-1), var(--bg-2));
+  letter-spacing: 0.01em;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-title);
+  letter-spacing: 0.01em;
+}
+
+.m-4 {
+  margin: 22px !important;
+}
+
+.mat-mdc-card,
+mat-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg) !important;
+  background: var(--surface) !important;
+  backdrop-filter: blur(7px);
+  box-shadow: var(--shadow-1);
+}
+
+.mat-mdc-card-title,
+mat-card-title {
+  color: var(--text);
+  font-weight: 700 !important;
+}
+
+.mat-mdc-card-subtitle,
+mat-card-subtitle {
+  color: var(--muted) !important;
+}
+
+.mat-mdc-raised-button.mat-primary {
+  --mdc-protected-button-container-color: var(--primary) !important;
+  --mdc-protected-button-label-text-color: #fff !important;
+}
+
+.mat-mdc-outlined-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-button.mat-primary {
+  --mdc-text-button-label-text-color: var(--primary-2) !important;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-form-field .mdc-notched-outline__leading,
+.mat-mdc-form-field .mdc-notched-outline__notch,
+.mat-mdc-form-field .mdc-notched-outline__trailing {
+  border-color: rgba(18, 33, 38, 0.28) !important;
+}
+
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: var(--primary) !important;
+}
+
+.mat-mdc-table {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface-strong);
+}
+
+.mat-mdc-header-row {
+  background: #f3f2ea;
+}
+
+.mat-mdc-header-cell {
+  color: #24333b !important;
+  font-weight: 700;
+}
+
+.mat-mdc-cell {
+  color: #2c3b43;
+}
+
+.mat-mdc-row:nth-child(even) {
+  background: #fbfaf6;
+}
+
+.no-data {
+  color: var(--muted) !important;
+}
+
+@media (max-width: 900px) {
+  .m-4 {
+    margin: 12px !important;
+  }
+}

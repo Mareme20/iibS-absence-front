@@ -1,0 +1,57 @@
+<mat-card class="m-4">
+  <app-page-header title="Mon État des Absences" subtitle="Suivi des cours manqués à l'IIBS" />
+
+  <mat-card-content>
+    <div class="table-container">
+      <table mat-table [dataSource]="absences" class="mat-elevation-z2 full-width">
+
+        <!-- Colonne Date -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef> Date </th>
+          <td mat-cell *matCellDef="let a"> {{ a.date | date:'dd/MM/yyyy' }} </td>
+        </ng-container>
+
+        <!-- Colonne Cours -->
+        <ng-container matColumnDef="cours">
+          <th mat-header-cell *matHeaderCellDef> Module </th>
+          <td mat-cell *matCellDef="let a"> {{ a.cours?.module }} </td>
+        </ng-container>
+
+        <!-- Colonne Heures -->
+        <ng-container matColumnDef="heures">
+          <th mat-header-cell *matHeaderCellDef> Heures </th>
+          <td mat-cell *matCellDef="let a"> {{ a.nombreHeures }}h </td>
+        </ng-container>
+
+        <!-- Colonne Statut (Règle Métier IIBS) -->
+        <ng-container matColumnDef="statut">
+          <th mat-header-cell *matHeaderCellDef> État </th>
+          <td mat-cell *matCellDef="let a">
+            <mat-chip-listbox>
+              <mat-chip-option [color]="a.estJustifiee ? 'accent' : 'warn'" selected>
+                {{ a.estJustifiee ? 'Justifiée' : 'Non Justifiée' }}
+              </mat-chip-option>
+            </mat-chip-listbox>
+          </td>
+        </ng-container>
+
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let a">
+            <button mat-icon-button color="primary" *ngIf="!a.estJustifiee" 
+                    (click)="openJustifyDialog(a)" title="Justifier">
+              <mat-icon>upload_file</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <!-- Message si aucune absence -->
+    <app-empty-state *ngIf="absences.length === 0" icon="check_circle" message="Aucune absence enregistrée" color="#4caf50" />
+  </mat-card-content>
+</mat-card>

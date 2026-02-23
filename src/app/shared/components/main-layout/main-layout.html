@@ -1,0 +1,100 @@
+<mat-sidenav-container class="sidenav-container" *ngIf="user$ | async as user">
+  <!-- Sidebar -->
+  <mat-sidenav
+    #drawer
+    [mode]="isMobile ? 'over' : 'side'"
+    [opened]="!isMobile"
+    class="sidenav">
+    <div class="logo-section">
+      <img src="assets/logo-iibs.png" alt="IIBS" width="74">
+      <div>
+        <h3>IIBS Absence</h3>
+        <p>Campus Console</p>
+      </div>
+    </div>
+    
+    <mat-nav-list>
+      <!-- Menu Dashboard (Tous les rôles) -->
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link" (click)="onNavClick()">
+        <mat-icon matListItemIcon>dashboard</mat-icon> Dashboard
+      </a>
+
+      <!-- Menu RP -->
+      <ng-container *ngIf="user.role === 'RP'">
+        <mat-divider></mat-divider>
+        <a mat-list-item routerLink="/classes" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>class</mat-icon> Classes
+        </a>
+        <a mat-list-item routerLink="/professeurs" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>person_tie</mat-icon> Professeurs
+        </a>
+        <a mat-list-item routerLink="/cours/planifier" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>event_note</mat-icon> Planifier Cours
+        </a>
+        <a mat-list-item routerLink="/stats" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>bar_chart</mat-icon> Statistiques
+        </a>
+      </ng-container>
+
+      <!-- Menu ATTACHE -->
+      <ng-container *ngIf="user.role === 'ATTACHE'">
+        <mat-divider></mat-divider>
+        <a mat-list-item routerLink="/etudiants" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>school</mat-icon> Étudiants
+        </a>
+        <a mat-list-item routerLink="/absences/traiter-justifications" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>task_alt</mat-icon> Justifications
+        </a>
+        <a mat-list-item routerLink="/stats" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>bar_chart</mat-icon> Statistiques
+        </a>
+      </ng-container>
+
+      <!-- Menu PROF -->
+      <ng-container *ngIf="user.role === 'PROF'">
+        <mat-divider></mat-divider>
+        <a mat-list-item routerLink="/absences/enregistrer" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>fact_check</mat-icon> Enregistrer Absence
+        </a>
+       
+        <a mat-list-item routerLink="/mes-cours" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>menu_book</mat-icon> Mes Cours
+        </a>
+      </ng-container>
+
+      <!-- Menu Étudiant -->
+      <ng-container *ngIf="user.role === 'ETUDIANT'">
+        <mat-divider></mat-divider>
+        <a mat-list-item routerLink="/mes-absences" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>fact_check</mat-icon> Mes Absences
+        </a>
+        <a mat-list-item routerLink="/mes-justifications" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>assignment</mat-icon> Mes Justificatifs
+        </a>
+      </ng-container>
+
+      <mat-divider></mat-divider>
+      
+      <a mat-list-item (click)="logout(); onNavClick()" class="logout-btn">
+        <mat-icon matListItemIcon color="warn">logout</mat-icon> Déconnexion
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Contenu Principal -->
+  <mat-sidenav-content>
+    <mat-toolbar class="topbar">
+      <button mat-icon-button class="menu-btn" (click)="toggleSidebar()" *ngIf="isMobile" aria-label="Ouvrir le menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="topbar-title">Tableau de bord</span>
+      <span class="topbar-user">{{ user.prenom }} · {{ user.role }}</span>
+    </mat-toolbar>
+    
+    <div class="main-content">
+      <!-- Les composants des features s'afficheront ici -->
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+ 
