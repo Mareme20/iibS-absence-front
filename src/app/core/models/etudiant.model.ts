@@ -20,7 +20,7 @@ export interface Etudiant {
   prenom: string;
   email: string;
   password?: string;
-  matricule: string;
+  matricule?: string;
   adresse: string;
   user?: EtudiantUser;
 }
@@ -36,7 +36,6 @@ export interface EtudiantCreateDto {
   prenom: string;
   email: string;
   password?: string;
-  matricule: string;
   adresse: string;
 }
 

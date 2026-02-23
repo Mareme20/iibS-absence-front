@@ -2,7 +2,13 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment.prod';
 import { Observable } from 'rxjs';
-import { Etudiant, EtudiantListItem, EtudiantUpdateDto, Inscription } from '../models/etudiant.model';
+import {
+  Etudiant,
+  EtudiantCreateDto,
+  EtudiantListItem,
+  EtudiantUpdateDto,
+  Inscription
+} from '../models/etudiant.model';
 import { Absence } from '../models/absence.model';
 import { Justification } from '../models/justification.model';
 import { ApiResponse } from '../models/api.model';
@@ -13,7 +19,7 @@ export class EtudiantService implements IEtudiantService {
   private http = inject(HttpClient);
   private readonly API_URL = `${environment.apiUrl}/etudiants`;
 
-  create(etudiant: Etudiant): Observable<ApiResponse<Etudiant>> {
+  create(etudiant: EtudiantCreateDto): Observable<ApiResponse<Etudiant>> {
     return this.http.post<ApiResponse<Etudiant>>(this.API_URL, etudiant);
   }
 

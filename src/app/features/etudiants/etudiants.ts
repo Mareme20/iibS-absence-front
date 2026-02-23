@@ -15,7 +15,13 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { EtudiantsFacade } from '../../application/facades/etudiants.facade';
 import { ClassesFacade } from '../../application/facades/classes.facade';
 import { Classe } from '../../core/models/classe.model';
-import { Etudiant, EtudiantListItem, EtudiantUpdateDto, Inscription } from '../../core/models/etudiant.model';
+import {
+  Etudiant,
+  EtudiantCreateDto,
+  EtudiantListItem,
+  EtudiantUpdateDto,
+  Inscription
+} from '../../core/models/etudiant.model';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header';
 
@@ -275,7 +281,14 @@ export class EtudiantsComponent implements OnInit {
         this.snackBar.open('Veuillez entrer un mot de passe', 'Fermer', { duration: 3000 });
         return;
       }
-      this.etudiantsFacade.create(this.etudiantForm).subscribe({
+      const payload: EtudiantCreateDto = {
+        nom: this.etudiantForm.nom,
+        prenom: this.etudiantForm.prenom,
+        email: this.etudiantForm.email,
+        password: this.etudiantForm.password,
+        adresse: this.etudiantForm.adresse
+      };
+      this.etudiantsFacade.create(payload).subscribe({
         next: () => {
           this.snackBar.open('Étudiant créé avec succès', 'Fermer', { duration: 3000 });
           this.resetForm();

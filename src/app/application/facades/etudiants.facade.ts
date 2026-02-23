@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { EtudiantService } from '../../core/services/etudiant.service';
-import { Etudiant, EtudiantUpdateDto, Inscription } from '../../core/models/etudiant.model';
+import { EtudiantCreateDto, EtudiantUpdateDto, Inscription } from '../../core/models/etudiant.model';
 
 @Injectable({ providedIn: 'root' })
 export class EtudiantsFacade {
@@ -10,7 +10,7 @@ export class EtudiantsFacade {
     return this.etudiantService.getAll();
   }
 
-  create(payload: Etudiant) {
+  create(payload: EtudiantCreateDto) {
     return this.etudiantService.create(payload);
   }
 
