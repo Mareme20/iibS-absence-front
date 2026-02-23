@@ -7,7 +7,7 @@ import { Absence, AbsenceCreateDto, AbsenceUpdateDto } from '../models/absence.m
 import { Justification } from '../models/justification.model';
 import { ApiResponse } from '../models/api.model';
 import { IAbsenceService } from '../interfaces/IAbsenceService';
-
+// Service pour gérer les absences et justifications
 @Injectable({ providedIn: 'root' })
 export class AbsenceService implements IAbsenceService {
   private http = inject(HttpClient);
