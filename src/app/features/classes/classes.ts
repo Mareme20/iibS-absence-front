@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 // Services
 import { ClassesFacade } from '../../application/facades/classes.facade';
-import { Classe } from '../../core/models/classe.model';
+import { Classe, ClasseUpdateDto } from '../../core/models/classe.model';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header';
 
@@ -177,7 +177,13 @@ export class ClassesComponent implements OnInit {
     }
 
     if (this.isEditing && this.editingId) {
-      this.classesFacade.update(this.editingId, this.classeForm).subscribe({
+      const payload: ClasseUpdateDto = {
+        libelle: this.classeForm.libelle,
+        filiere: this.classeForm.filiere,
+        niveau: this.classeForm.niveau
+      };
+
+      this.classesFacade.update(this.editingId, payload).subscribe({
         next: (res) => {
           if (res && res.success === false) {
             this.snackBar.open(res.message || 'Erreur de mise à jour', 'Fermer', { duration: 3000 });
@@ -214,7 +220,11 @@ export class ClassesComponent implements OnInit {
   editClasse(classe: Classe) {
     this.isEditing = true;
     this.editingId = classe.id || null;
-    this.classeForm = { ...classe };
+    this.classeForm = {
+      libelle: classe.libelle,
+      filiere: classe.filiere,
+      niveau: classe.niveau
+    };
   }
 
   deleteClasse(classe: Classe) {
