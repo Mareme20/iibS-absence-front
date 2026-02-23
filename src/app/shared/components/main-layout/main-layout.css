@@ -1,0 +1,111 @@
+.sidenav-container {
+  height: 100vh;
+  background: transparent;
+}
+
+.sidenav {
+  width: 278px;
+  padding: 16px 12px;
+  background:
+    linear-gradient(210deg, rgba(12, 108, 97, 0.95), rgba(18, 72, 68, 0.94));
+  color: #f7fcfb;
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 8px 0 24px rgba(16, 30, 32, 0.22);
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.logo-section h3 {
+  margin: 0;
+  font-size: 1.02rem;
+  color: #fff;
+}
+
+.logo-section p {
+  margin: 2px 0 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.78rem;
+}
+
+.sidenav .mdc-list-item {
+  margin: 5px 0;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.sidenav .mdc-list-item:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.active-link {
+  background: rgba(255, 255, 255, 0.18) !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.active-link mat-icon {
+  color: #ffd39a !important;
+}
+
+.sidenav mat-icon {
+  color: rgba(250, 255, 252, 0.9) !important;
+}
+
+.logout-btn {
+  margin-top: 8px;
+  background: rgba(247, 112, 112, 0.16);
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-bottom: 1px solid rgba(20, 35, 40, 0.1);
+  backdrop-filter: blur(8px);
+  gap: 8px;
+}
+
+.topbar-title {
+  font-family: "Space Grotesk", "Outfit", sans-serif;
+  font-weight: 700;
+  color: #1f2d34;
+}
+
+.topbar-user {
+  font-size: 0.9rem;
+  color: #4b5f68;
+}
+
+.menu-btn {
+  color: #1f2d34;
+}
+
+.main-content {
+  padding: 10px 12px 18px;
+}
+
+@media (max-width: 992px) {
+  .sidenav {
+    width: 248px;
+    box-shadow: 12px 0 30px rgba(16, 30, 32, 0.3);
+  }
+
+  .topbar-user {
+    display: none;
+  }
+
+  .main-content {
+    padding: 8px 8px 14px;
+  }
+}
