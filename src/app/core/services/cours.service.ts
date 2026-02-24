@@ -1,7 +1,7 @@
 // src/app/core/services/cours.service.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 import { Observable } from 'rxjs';
 import { Cours } from '../models/cours.model';
 import { ApiResponse } from '../models/api.model';

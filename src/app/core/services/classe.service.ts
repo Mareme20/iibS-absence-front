@@ -1,7 +1,7 @@
 // src/app/core/services/classe.service.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 import { Observable } from 'rxjs';
 import { Classe } from '../models/classe.model';
 import { ApiResponse } from '../models/api.model';
