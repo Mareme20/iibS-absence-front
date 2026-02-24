@@ -9,7 +9,7 @@ import { ITokenService } from '../interfaces/ITokenService';
 export class TokenService implements ITokenService {
   // Signal pour stocker le token
   private _token = signal<string | null>(this.getTokenFromStorage());
-  
+  //
   // Computed signal pour obtenir le token
   readonly token = computed(() => this._token());
   
