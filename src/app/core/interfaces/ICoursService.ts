@@ -10,7 +10,7 @@ export interface ICoursService {
   /**
    * Récupérer tous les cours
    */
-  getAll(): Observable<ApiResponse<Cours[]>>;
+  getAll(heureDebut?: string, heureFin?: string): Observable<ApiResponse<Cours[]>>;
 
   /**
    * Récupérer les cours du professeur connecté

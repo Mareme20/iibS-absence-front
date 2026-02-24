@@ -12,6 +12,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard').then(m => m.DashboardComponent) },
       { path: 'classes', loadComponent: () => import('./features/classes/classes').then(m => m.ClassesComponent) },
+      { path: 'classes/etudiants', loadComponent: () => import('./features/classes/etudiants-classe').then(m => m.EtudiantsClasseComponent) },
       { path: 'professeurs', loadComponent: () => import('./features/professeurs/professeurs').then(m => m.ProfessorsComponent) },
       { path: 'etudiants', loadComponent: () => import('./features/etudiants/etudiants').then(m => m.EtudiantsComponent) },
       { path: 'cours/planifier', loadComponent: () => import('./features/cours/planifier-cours').then(m => m.PlanifierCoursComponent) },

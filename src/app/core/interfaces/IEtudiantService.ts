@@ -8,6 +8,7 @@ import {
 } from '../models/etudiant.model';
 import { Absence } from '../models/absence.model';
 import { Justification } from '../models/justification.model';
+import { Cours } from '../models/cours.model';
 import { ApiResponse } from '../models/api.model';
 
 /**
@@ -48,6 +49,11 @@ export interface IEtudiantService {
    * Récupérer les justifications de l'étudiant connecté
    */
   getMesJustifications(): Observable<ApiResponse<Justification[]>>;
+
+  /**
+   * Récupérer les cours de l'étudiant connecté
+   */
+  getMesCours(dateDebut?: string, dateFin?: string): Observable<ApiResponse<Cours[]>>;
 
   /**
    * Mettre à jour un étudiant

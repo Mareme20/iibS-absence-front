@@ -6,6 +6,7 @@ export interface Cours {
   date: Date | string;
   heureDebut: string;
   heureFin: string;
+  nombreHeure: number;
   semestre: string;
   module: string;
   professeur?: User;
@@ -19,6 +20,7 @@ export interface CoursCreateDto {
   date: string;
   heureDebut: string;
   heureFin: string;
+  nombreHeure: number;
   semestre: string;
   professeurId: number;
   classeIds: number[];
@@ -29,6 +31,7 @@ export interface CoursUpdateDto {
   date?: string;
   heureDebut?: string;
   heureFin?: string;
+  nombreHeure?: number;
   semestre?: string;
   professeurId?: number;
   classeIds?: number[];

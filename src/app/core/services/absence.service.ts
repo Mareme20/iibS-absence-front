@@ -1,7 +1,7 @@
 // src/app/core/services/absence.service.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 import { Observable, map } from 'rxjs';
 import { Absence, AbsenceCreateDto, AbsenceUpdateDto } from '../models/absence.model';
 import { Justification } from '../models/justification.model';
@@ -26,10 +26,16 @@ export class AbsenceService implements IAbsenceService {
   }
 
   // Pour les étudiants - voir leurs justifications
-  getMesJustifications(statut?: string): Observable<Justification[]> {
+  getMesJustifications(filters?: { dateDebut?: string; dateFin?: string; statut?: string }): Observable<Justification[]> {
     let params = new HttpParams();
-    if (statut) {
-      params = params.set('statut', statut);
+    if (filters?.dateDebut) {
+      params = params.set('dateDebut', filters.dateDebut);
+    }
+    if (filters?.dateFin) {
+      params = params.set('dateFin', filters.dateFin);
+    }
+    if (filters?.statut) {
+      params = params.set('statut', filters.statut);
     }
     return this.http.get<ApiResponse<Justification[]>>(`${this.ETUDIANT_URL}/mes-justifications`, { params }).pipe(
       map(res => res.data)
@@ -51,6 +57,26 @@ export class AbsenceService implements IAbsenceService {
   // Récupérer une absence par ID
   getById(id: number): Observable<Absence> {
     return this.http.get<ApiResponse<Absence>>(`${this.API_URL}/${id}`).pipe(
+      map(res => res.data)
+    );
+  }
+
+  getByCours(coursId: number, date?: string): Observable<Absence[]> {
+    let params = new HttpParams();
+    if (date) {
+      params = params.set('date', date);
+    }
+    return this.http.get<ApiResponse<Absence[]>>(`${this.API_URL}/cours/${coursId}`, { params }).pipe(
+      map(res => res.data)
+    );
+  }
+
+  getByEtudiant(etudiantId: number, date?: string): Observable<Absence[]> {
+    let params = new HttpParams();
+    if (date) {
+      params = params.set('date', date);
+    }
+    return this.http.get<ApiResponse<Absence[]>>(`${this.API_URL}/etudiant/${etudiantId}`, { params }).pipe(
       map(res => res.data)
     );
   }

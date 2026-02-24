@@ -21,6 +21,7 @@ import { ProfesseursFacade } from '../../application/facades/professeurs.facade'
 import { Cours } from '../../core/models/cours.model';
 import { Classe } from '../../core/models/classe.model';
 import { Professeur } from '../../core/models/professeur.model';
+import { EtudiantListItem } from '../../core/models/etudiant.model';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header';
 
@@ -78,6 +79,11 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
                     <mat-label>Heure de fin</mat-label>
                     <input matInput [(ngModel)]="coursForm.heureFin" name="heureFin" placeholder="12:00">
                   </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Nombre d'heures</mat-label>
+                    <input matInput type="number" min="1" [(ngModel)]="coursForm.nombreHeure" name="nombreHeure">
+                  </mat-form-field>
                 </div>
 
                 <div class="form-row">
@@ -117,6 +123,25 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
           <!-- Tab: Liste des cours -->
           <mat-tab label="Liste des cours">
             <div class="tab-content">
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Heure début min</mat-label>
+                  <input matInput [(ngModel)]="heureDebutFilter" name="heureDebutFilter" placeholder="08:00">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Heure fin max</mat-label>
+                  <input matInput [(ngModel)]="heureFinFilter" name="heureFinFilter" placeholder="12:00">
+                </mat-form-field>
+                <div class="form-actions">
+                  <button mat-stroked-button color="primary" (click)="loadCours()">
+                    <mat-icon>search</mat-icon> Filtrer
+                  </button>
+                  <button mat-stroked-button (click)="clearCoursFilters()">
+                    <mat-icon>clear</mat-icon> Effacer
+                  </button>
+                </div>
+              </div>
+
               <table mat-table [dataSource]="coursList" class="mat-elevation-z2 full-width">
                 <ng-container matColumnDef="id">
                   <th mat-header-cell *matHeaderCellDef> ID </th>
@@ -138,6 +163,11 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
                   <td mat-cell *matCellDef="let c"> {{c.semestre}} </td>
                 </ng-container>
 
+                <ng-container matColumnDef="nombreHeure">
+                  <th mat-header-cell *matHeaderCellDef> Nb Heures </th>
+                  <td mat-cell *matCellDef="let c"> {{c.nombreHeure}}h </td>
+                </ng-container>
+
                 <ng-container matColumnDef="actions">
                   <th mat-header-cell *matHeaderCellDef> Actions </th>
                   <td mat-cell *matCellDef="let c">
@@ -152,6 +182,45 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+
+              <div class="form-row" style="margin-top:16px;">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Cours (voir classes/étudiants)</mat-label>
+                  <mat-select [(ngModel)]="selectedCoursViewId" name="selectedCoursViewId" (selectionChange)="onCoursViewChange()">
+                    <mat-option *ngFor="let c of coursList" [value]="c.id">
+                      {{c.module}} - {{c.date | date:'dd/MM/yyyy'}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row" *ngIf="classesDuCours.length > 0">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Classes du cours</mat-label>
+                  <mat-select [(ngModel)]="selectedClasseViewId" name="selectedClasseViewId" (selectionChange)="loadEtudiantsClasse()">
+                    <mat-option *ngFor="let c of classesDuCours" [value]="c.id">
+                      {{c.libelle}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <table mat-table [dataSource]="etudiantsClasse" class="mat-elevation-z2 full-width" *ngIf="etudiantsClasse.length > 0">
+                <ng-container matColumnDef="prenom">
+                  <th mat-header-cell *matHeaderCellDef>Prénom</th>
+                  <td mat-cell *matCellDef="let e">{{ e.user?.prenom || e.prenom }}</td>
+                </ng-container>
+                <ng-container matColumnDef="nom">
+                  <th mat-header-cell *matHeaderCellDef>Nom</th>
+                  <td mat-cell *matCellDef="let e">{{ e.user?.nom || e.nom }}</td>
+                </ng-container>
+                <ng-container matColumnDef="matricule">
+                  <th mat-header-cell *matHeaderCellDef>Matricule</th>
+                  <td mat-cell *matCellDef="let e">{{ e.matricule }}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="['prenom','nom','matricule']"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['prenom','nom','matricule'];"></tr>
               </table>
 
               <app-empty-state *ngIf="coursList.length === 0" icon="info" message="Aucun cours trouvé" />
@@ -177,16 +246,21 @@ export class PlanifierCoursComponent implements OnInit {
   private professeursFacade = inject(ProfesseursFacade);
   private snackBar = inject(MatSnackBar);
 
-  displayedColumns: string[] = ['id', 'module', 'date', 'semestre', 'actions'];
+  displayedColumns: string[] = ['id', 'module', 'date', 'semestre', 'nombreHeure', 'actions'];
   classes: Classe[] = [];
   professors: Professeur[] = [];
   coursList: Cours[] = [];
+  classesDuCours: Classe[] = [];
+  etudiantsClasse: EtudiantListItem[] = [];
+  selectedCoursViewId: number | null = null;
+  selectedClasseViewId: number | null = null;
 
   coursForm: Cours = {
     module: '',
     date: '',
     heureDebut: '',
     heureFin: '',
+    nombreHeure: 1,
     semestre: '',
     professeurId: 0,
     classeIds: []
@@ -194,6 +268,8 @@ export class PlanifierCoursComponent implements OnInit {
 
   isEditing = false;
   editingId: number | null = null;
+  heureDebutFilter = '';
+  heureFinFilter = '';
 
   ngOnInit() {
     this.loadClasses();
@@ -221,7 +297,9 @@ export class PlanifierCoursComponent implements OnInit {
   }
 
   loadCours() {
-    this.coursFacade.getAll().subscribe({
+    const heureDebut = this.heureDebutFilter.trim() || undefined;
+    const heureFin = this.heureFinFilter.trim() || undefined;
+    this.coursFacade.getAll(heureDebut, heureFin).subscribe({
       next: (res) => {
         this.coursList = res.data || [];
       },
@@ -231,9 +309,16 @@ export class PlanifierCoursComponent implements OnInit {
     });
   }
 
+  clearCoursFilters() {
+    this.heureDebutFilter = '';
+    this.heureFinFilter = '';
+    this.loadCours();
+  }
+
   saveCours() {
     if (!this.coursForm.module || !this.coursForm.date || !this.coursForm.heureDebut || 
         !this.coursForm.heureFin || !this.coursForm.semestre || !this.coursForm.professeurId ||
+        !this.coursForm.nombreHeure ||
         (this.coursForm.classeIds?.length ?? 0) === 0) {
       this.snackBar.open('Veuillez remplir tous les champs', 'Fermer', { duration: 3000 });
       return;
@@ -284,6 +369,7 @@ export class PlanifierCoursComponent implements OnInit {
       date: new Date(cours.date),
       heureDebut: cours.heureDebut,
       heureFin: cours.heureFin,
+      nombreHeure: cours.nombreHeure,
       semestre: cours.semestre,
       professeurId: cours.professeurId || cours.professeur?.id || 0,
       classeIds: cours.classes?.map((c) => c.id).filter((id): id is number => !!id) || []
@@ -320,9 +406,32 @@ export class PlanifierCoursComponent implements OnInit {
       date: '',
       heureDebut: '',
       heureFin: '',
+      nombreHeure: 1,
       semestre: '',
       professeurId: 0,
       classeIds: []
     };
+  }
+
+  onCoursViewChange() {
+    const cours = this.coursList.find((c) => c.id === this.selectedCoursViewId);
+    this.classesDuCours = cours?.classes || [];
+    this.selectedClasseViewId = null;
+    this.etudiantsClasse = [];
+  }
+
+  loadEtudiantsClasse() {
+    if (!this.selectedClasseViewId) {
+      this.etudiantsClasse = [];
+      return;
+    }
+    this.classesFacade.getEtudiantsByClasse(this.selectedClasseViewId).subscribe({
+      next: (result) => {
+        this.etudiantsClasse = result.data || [];
+      },
+      error: () => {
+        this.etudiantsClasse = [];
+      }
+    });
   }
 }

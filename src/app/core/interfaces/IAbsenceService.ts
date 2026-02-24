@@ -16,9 +16,9 @@ export interface IAbsenceService {
 
   /**
    * Récupérer les justifications de l'étudiant connecté
-   * @param statut - Optionnel: filtrer par statut
+   * @param filters - Optionnel: filtrer par période/statut
    */
-  getMesJustifications(statut?: string): Observable<Justification[]>;
+  getMesJustifications(filters?: { dateDebut?: string; dateFin?: string; statut?: string }): Observable<Justification[]>;
 
   /**
    * Créer une nouvelle absence
@@ -36,6 +36,20 @@ export interface IAbsenceService {
    * @param id - ID de l'absence
    */
   getById(id: number): Observable<Absence>;
+
+  /**
+   * Récupérer les absences d'un cours
+   * @param coursId - ID du cours
+   * @param date - Optionnel: filtrer par date
+   */
+  getByCours(coursId: number, date?: string): Observable<Absence[]>;
+
+  /**
+   * Récupérer les absences d'un étudiant
+   * @param etudiantId - ID de l'étudiant
+   * @param date - Optionnel: filtrer par date
+   */
+  getByEtudiant(etudiantId: number, date?: string): Observable<Absence[]>;
 
   /**
    * Mettre à jour une absence

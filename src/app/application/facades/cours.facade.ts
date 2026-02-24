@@ -6,8 +6,8 @@ import { Cours } from '../../core/models/cours.model';
 export class CoursFacade {
   private coursService = inject(CoursService);
 
-  getAll() {
-    return this.coursService.getAll();
+  getAll(heureDebut?: string, heureFin?: string) {
+    return this.coursService.getAll(heureDebut, heureFin);
   }
 
   getMesCours(dateDebut?: string, dateFin?: string) {

@@ -28,8 +28,8 @@
           <th mat-header-cell *matHeaderCellDef> État </th>
           <td mat-cell *matCellDef="let a">
             <mat-chip-listbox>
-              <mat-chip-option [color]="a.estJustifiee ? 'accent' : 'warn'" selected>
-                {{ a.estJustifiee ? 'Justifiée' : 'Non Justifiée' }}
+              <mat-chip-option [color]="getEtatColor(a)" selected>
+                {{ getEtatLabel(a) }}
               </mat-chip-option>
             </mat-chip-listbox>
           </td>
@@ -39,7 +39,7 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let a">
-            <button mat-icon-button color="primary" *ngIf="!a.estJustifiee" 
+            <button mat-icon-button color="primary" *ngIf="!a.justification && !a.estJustifiee" 
                     (click)="openJustifyDialog(a)" title="Justifier">
               <mat-icon>upload_file</mat-icon>
             </button>

@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { StatutJustification } from '../../../core/models/justification.model';
 
 @Component({
   selector: 'app-mes-absences',
@@ -64,5 +65,20 @@ export class MesAbsencesComponent implements OnInit {
         this.loadAbsences();
       }
     });
+  }
+
+  getEtatLabel(absence: Absence): string {
+    const statut = absence.justification?.statut;
+    if (statut === StatutJustification.ACCEPTEE || absence.estJustifiee) return 'Justifiée';
+    if (statut === StatutJustification.REFUSEE) return 'Justification refusée';
+    if (statut === StatutJustification.EN_ATTENTE || absence.justification) return 'Justification en attente';
+    return 'Non Justifiée';
+  }
+
+  getEtatColor(absence: Absence): 'primary' | 'accent' | 'warn' {
+    const statut = absence.justification?.statut;
+    if (statut === StatutJustification.ACCEPTEE || absence.estJustifiee) return 'accent';
+    if (statut === StatutJustification.EN_ATTENTE || absence.justification) return 'primary';
+    return 'warn';
   }
 }

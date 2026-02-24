@@ -25,4 +25,8 @@ export class EtudiantsFacade {
   inscrire(payload: Inscription) {
     return this.etudiantService.inscription(payload);
   }
+
+  getMesCours(dateDebut?: string, dateFin?: string) {
+    return this.etudiantService.getMesCours(dateDebut, dateFin);
+  }
 }

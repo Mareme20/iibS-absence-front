@@ -11,7 +11,9 @@ import { FormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { CoursFacade } from '../../application/facades/cours.facade';
+import { EtudiantsFacade } from '../../application/facades/etudiants.facade';
 import { Cours } from '../../core/models/cours.model';
+import { AuthService } from '../../core/services/auth';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state';
 
 @Component({
@@ -147,6 +149,8 @@ import { EmptyStateComponent } from '../../shared/components/empty-state/empty-s
 })
 export class MesCoursComponent implements OnInit {
   private coursFacade = inject(CoursFacade);
+  private etudiantsFacade = inject(EtudiantsFacade);
+  private authService = inject(AuthService);
   
   cours: Cours[] = [];
   displayedColumns = ['module', 'date', 'heureDebut', 'heureFin', 'semestre', 'classes'];
@@ -170,7 +174,11 @@ export class MesCoursComponent implements OnInit {
       dateFinStr = this.formatDate(this.dateFin);
     }
     
-    this.coursFacade.getMesCours(dateDebutStr, dateFinStr).subscribe({
+    const request$ = this.authService.hasRole('ETUDIANT')
+      ? this.etudiantsFacade.getMesCours(dateDebutStr, dateFinStr)
+      : this.coursFacade.getMesCours(dateDebutStr, dateFinStr);
+
+    request$.subscribe({
       next: (res) => {
         this.cours = res?.data || [];
         this.loading = false;

@@ -35,7 +35,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
                 {{ j.absence?.etudiant?.user?.prenom || j.absence?.etudiant?.prenom }}
                 {{ j.absence?.etudiant?.user?.nom || j.absence?.etudiant?.nom }}
                 <span *ngIf="!j.absence?.etudiant?.user?.nom && !j.absence?.etudiant?.nom">
-                  {{ j.absence?.etudiant?.matricule || 'N/A' }}
+                  {{ j.absence?.etudiant?.matricule|| 'N/A' }}
                 </span>
               </td>
             </ng-container>

@@ -18,6 +18,7 @@ import {
   TopAbsentStat
 } from '../../core/interfaces/IStatsService';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state';
+import * as statsUtils from './stats.utils';
 
 @Component({
   selector: 'app-stats',
@@ -129,7 +130,7 @@ import { EmptyStateComponent } from '../../shared/components/empty-state/empty-s
               <div class="chart-title">Diagramme des absences non justifiées</div>
               <div class="bar-chart">
                 <div class="bar-row" *ngFor="let e of top5Absents">
-                  <div class="bar-label">{{ e.matricule }}</div>
+                  <div class="bar-label">{{ getTopAbsentLabel(e) }}</div>
                   <div class="bar-track">
                     <div class="bar-fill" [style.width.%]="getAbsencesWidth(e)">
                       <span class="bar-value">{{ getAbsencesValue(e) }}</span>
@@ -142,7 +143,7 @@ import { EmptyStateComponent } from '../../shared/components/empty-state/empty-s
             <table mat-table [dataSource]="top5Absents" class="full-width">
               <ng-container matColumnDef="etudiant">
                 <th mat-header-cell *matHeaderCellDef>Étudiant</th>
-                <td mat-cell *matCellDef="let e">{{e.matricule}}</td>
+                <td mat-cell *matCellDef="let e">{{ getTopAbsentLabel(e) }}</td>
               </ng-container>
               <ng-container matColumnDef="nombreAbsences">
                 <th mat-header-cell *matHeaderCellDef>Nombre d'Absences</th>
@@ -165,7 +166,7 @@ import { EmptyStateComponent } from '../../shared/components/empty-state/empty-s
               <div class="chart-title">Heures d'absences cumulées</div>
               <div class="bar-chart">
                 <div class="bar-row" *ngFor="let e of plus25Heures">
-                  <div class="bar-label">{{ e.matricule }}</div>
+                  <div class="bar-label">{{ getPlus25Label(e) }}</div>
                   <div class="bar-track">
                     <div class="bar-fill bar-fill-risk" [style.width.%]="getHeuresWidth(e)">
                       <span class="bar-value">{{ getHeuresValue(e) }}h</span>
@@ -178,7 +179,7 @@ import { EmptyStateComponent } from '../../shared/components/empty-state/empty-s
             <table mat-table [dataSource]="plus25Heures" class="full-width">
               <ng-container matColumnDef="etudiant">
                 <th mat-header-cell *matHeaderCellDef>Étudiant</th>
-                <td mat-cell *matCellDef="let e">{{e.matricule}}</td>
+                <td mat-cell *matCellDef="let e">{{ getPlus25Label(e) }}</td>
               </ng-container>
               <ng-container matColumnDef="totalHeures">
                 <th mat-header-cell *matHeaderCellDef>Heures Totales</th>
@@ -373,63 +374,53 @@ export class StatsComponent implements OnInit {
   }
 
   getAbsencesValue(item: TopAbsentStat): number {
-    return Number(item?.absences || 0);
+    return statsUtils.getAbsencesValue(item);
+  }
+
+  getTopAbsentLabel(item: TopAbsentStat): string {
+    return statsUtils.getTopAbsentLabel(item);
   }
 
   getAbsencesWidth(item: TopAbsentStat): number {
     const current = this.getAbsencesValue(item);
-    const max = Math.max(...this.top5Absents.map((x) => this.getAbsencesValue(x)), 1);
-    return (current / max) * 100;
+    return statsUtils.getRelativeWidth(current, this.top5Absents.map((x) => this.getAbsencesValue(x)));
   }
 
   getProfCoursValue(item: CoursParProfesseurStat): number {
-    return Number(item?.nombreCours || 0);
+    return statsUtils.getProfCoursValue(item);
   }
 
   getProfCoursWidth(item: CoursParProfesseurStat): number {
     const current = this.getProfCoursValue(item);
-    const max = Math.max(...this.coursParProfesseur.map((x) => this.getProfCoursValue(x)), 1);
-    return (current / max) * 100;
+    return statsUtils.getRelativeWidth(current, this.coursParProfesseur.map((x) => this.getProfCoursValue(x)));
   }
 
   getClasseValue(item: CoursParClasseStat): number {
-    return Number(item?.nombreCours || 0);
+    return statsUtils.toNumber(item?.nombreCours);
   }
 
   getClasseTotal(): number {
-    return this.coursParClasse.reduce((sum: number, c) => sum + this.getClasseValue(c), 0);
+    return statsUtils.getClasseTotal(this.coursParClasse);
   }
 
   getClasseColor(index: number): string {
-    const palette = ['#1f77b4', '#2ca58d', '#ff9f1c', '#ef476f', '#7353ba', '#06d6a0', '#118ab2'];
-    return palette[index % palette.length];
+    return statsUtils.getClasseColor(index);
   }
 
   getClasseDonutBackground(): string {
-    const total = this.getClasseTotal();
-    if (!total) return '#e6edf3';
-
-    let start = 0;
-    const segments = this.coursParClasse
-      .map((item, i: number) => {
-        const size = (this.getClasseValue(item) / total) * 360;
-        const color = this.getClasseColor(i);
-        const seg = `${color} ${start}deg ${start + size}deg`;
-        start += size;
-        return seg;
-      })
-      .join(', ');
-
-    return `conic-gradient(${segments})`;
+    return statsUtils.getClasseDonutBackground(this.coursParClasse);
   }
 
   getHeuresValue(item: Plus25HeuresStat): number {
-    return Number(item?.totalHeures || 0);
+    return statsUtils.getHeuresValue(item);
+  }
+
+  getPlus25Label(item: Plus25HeuresStat): string {
+    return statsUtils.getPlus25Label(item);
   }
 
   getHeuresWidth(item: Plus25HeuresStat): number {
     const current = this.getHeuresValue(item);
-    const max = Math.max(...this.plus25Heures.map((x) => this.getHeuresValue(x)), 1);
-    return (current / max) * 100;
+    return statsUtils.getRelativeWidth(current, this.plus25Heures.map((x) => this.getHeuresValue(x)));
   }
 }

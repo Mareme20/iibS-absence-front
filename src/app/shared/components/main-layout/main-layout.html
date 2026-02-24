@@ -25,11 +25,17 @@
         <a mat-list-item routerLink="/classes" routerLinkActive="active-link" (click)="onNavClick()">
           <mat-icon matListItemIcon>class</mat-icon> Classes
         </a>
+        <a mat-list-item routerLink="/classes/etudiants" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>groups</mat-icon> Étudiants Par Classe
+        </a>
         <a mat-list-item routerLink="/professeurs" routerLinkActive="active-link" (click)="onNavClick()">
           <mat-icon matListItemIcon>person_tie</mat-icon> Professeurs
         </a>
         <a mat-list-item routerLink="/cours/planifier" routerLinkActive="active-link" (click)="onNavClick()">
           <mat-icon matListItemIcon>event_note</mat-icon> Planifier Cours
+        </a>
+        <a mat-list-item routerLink="/register" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>manage_accounts</mat-icon> Comptes RP/Attaché
         </a>
         <a mat-list-item routerLink="/stats" routerLinkActive="active-link" (click)="onNavClick()">
           <mat-icon matListItemIcon>bar_chart</mat-icon> Statistiques
@@ -41,6 +47,12 @@
         <mat-divider></mat-divider>
         <a mat-list-item routerLink="/etudiants" routerLinkActive="active-link" (click)="onNavClick()">
           <mat-icon matListItemIcon>school</mat-icon> Étudiants
+        </a>
+        <a mat-list-item routerLink="/classes/etudiants" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>groups</mat-icon> Étudiants Par Classe
+        </a>
+        <a mat-list-item routerLink="/absences/enregistrer" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>fact_check</mat-icon> Absences
         </a>
         <a mat-list-item routerLink="/absences/traiter-justifications" routerLinkActive="active-link" (click)="onNavClick()">
           <mat-icon matListItemIcon>task_alt</mat-icon> Justifications
@@ -65,6 +77,9 @@
       <!-- Menu Étudiant -->
       <ng-container *ngIf="user.role === 'ETUDIANT'">
         <mat-divider></mat-divider>
+        <a mat-list-item routerLink="/mes-cours" routerLinkActive="active-link" (click)="onNavClick()">
+          <mat-icon matListItemIcon>menu_book</mat-icon> Mes Cours
+        </a>
         <a mat-list-item routerLink="/mes-absences" routerLinkActive="active-link" (click)="onNavClick()">
           <mat-icon matListItemIcon>fact_check</mat-icon> Mes Absences
         </a>

@@ -123,7 +123,6 @@ import { PageHeaderComponent } from '../../../shared/components/page-header/page
 export class MesJustificationsComponent implements OnInit {
   private absencesFacade = inject(AbsencesFacade);
 
-  allJustifications: Justification[] = [];
   justifications: Justification[] = [];
   statut: string = '';
   dateJustification: Date | null = null;
@@ -133,31 +132,29 @@ export class MesJustificationsComponent implements OnInit {
   }
 
   loadJustifications() {
-    this.absencesFacade.getMesJustifications().subscribe({
+    const date = this.dateJustification ? this.toYmd(this.dateJustification) : undefined;
+    this.absencesFacade.getMesJustifications({
+      statut: this.statut || undefined,
+      dateDebut: date,
+      dateFin: date
+    }).subscribe({
       next: (res) => {
-        this.allJustifications = res || [];
-        this.applyFilters();
+        this.justifications = res || [];
       },
       error: () => {
-        this.allJustifications = [];
         this.justifications = [];
       }
     });
   }
 
   applyFilters() {
-    const dateFilter = this.dateJustification ? this.toYmd(this.dateJustification) : '';
-    this.justifications = (this.allJustifications || []).filter((j) => {
-      const okStatut = !this.statut || this.normalizeStatut(j?.statut) === this.normalizeStatut(this.statut);
-      const okDate = !dateFilter || this.toYmd(j?.date) === dateFilter;
-      return okStatut && okDate;
-    });
+    this.loadJustifications();
   }
 
   clearFilters() {
     this.statut = '';
     this.dateJustification = null;
-    this.applyFilters();
+    this.loadJustifications();
   }
 
   private toYmd(value: Date | string): string {
@@ -172,9 +169,5 @@ export class MesJustificationsComponent implements OnInit {
     const m = String(date.getMonth() + 1).padStart(2, '0');
     const d = String(date.getDate()).padStart(2, '0');
     return `${y}-${m}-${d}`;
-  }
-
-  private normalizeStatut(statut: string | undefined): string {
-    return (statut || 'EN_ATTENTE').trim().toUpperCase();
   }
 }

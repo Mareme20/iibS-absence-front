@@ -48,24 +48,8 @@ export class RegisterComponent {
     prenom: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
-    role: [UserRole.ETUDIANT as UserRole, [Validators.required]],
-    adresse: ['']
+    role: [UserRole.ATTACHE as UserRole, [Validators.required]]
   });
-
-  constructor() {
-    this.registerForm.controls.role.valueChanges.subscribe((role) => {
-      const adresseCtrl = this.registerForm.controls.adresse;
-
-      if (role === UserRole.ETUDIANT) {
-        adresseCtrl.setValidators([Validators.required]);
-      } else {
-        adresseCtrl.clearValidators();
-        adresseCtrl.setValue('');
-      }
-
-      adresseCtrl.updateValueAndValidity({ emitEvent: false });
-    });
-  }
 
   onSubmit() {
     if (this.registerForm.invalid) {

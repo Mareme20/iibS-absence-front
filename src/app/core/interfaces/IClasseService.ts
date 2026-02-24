@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import { Classe } from '../models/classe.model';
 import { ApiResponse } from '../models/api.model';
+import { EtudiantListItem } from '../models/etudiant.model';
 
 /**
  * Interface pour le service de classes
@@ -36,4 +37,11 @@ export interface IClasseService {
    * @param id - ID de la classe
    */
   delete(id: number): Observable<ApiResponse<null>>;
+
+  /**
+   * Lister les étudiants inscrits dans une classe
+   * @param id - ID de la classe
+   * @param annee - Année académique (optionnelle, format YYYY-YYYY)
+   */
+  getEtudiantsByClasse(id: number, annee?: string): Observable<ApiResponse<EtudiantListItem[]>>;
 }

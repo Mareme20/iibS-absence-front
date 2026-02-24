@@ -13,12 +13,16 @@ export interface CoursParClasseStat {
 }
 
 export interface TopAbsentStat {
-  matricule: string;
+  nom?: string;
+  prenom?: string;
+  matricule?: string;
   absences: number;
 }
 
 export interface Plus25HeuresStat {
-  matricule: string;
+  nom?: string;
+  prenom?: string;
+  matricule?: string;
   totalHeures: number;
 }
 

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import {
   Etudiant,
@@ -11,6 +11,7 @@ import {
 } from '../models/etudiant.model';
 import { Absence } from '../models/absence.model';
 import { Justification } from '../models/justification.model';
+import { Cours } from '../models/cours.model';
 import { ApiResponse } from '../models/api.model';
 import { IEtudiantService } from '../interfaces/IEtudiantService';
 
@@ -42,6 +43,17 @@ export class EtudiantService implements IEtudiantService {
 
   getMesJustifications(): Observable<ApiResponse<Justification[]>> {
     return this.http.get<ApiResponse<Justification[]>>(`${this.API_URL}/mes-justifications`);
+  }
+
+  getMesCours(dateDebut?: string, dateFin?: string): Observable<ApiResponse<Cours[]>> {
+    let params = {};
+    if (dateDebut) {
+      params = { ...params, dateDebut };
+    }
+    if (dateFin) {
+      params = { ...params, dateFin };
+    }
+    return this.http.get<ApiResponse<Cours[]>>(`${this.API_URL}/mes-cours`, { params });
   }
 
   update(id: number, data: EtudiantUpdateDto): Observable<ApiResponse<EtudiantListItem>> {

@@ -21,4 +21,8 @@ export class ClassesFacade {
   delete(id: number) {
     return this.classeService.delete(id);
   }
+
+  getEtudiantsByClasse(id: number, annee?: string) {
+    return this.classeService.getEtudiantsByClasse(id, annee);
+  }
 }

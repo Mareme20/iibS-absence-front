@@ -11,6 +11,14 @@ export class AbsencesFacade {
     return this.absenceService.getAll();
   }
 
+  getByCours(coursId: number, date?: string) {
+    return this.absenceService.getByCours(coursId, date);
+  }
+
+  getByEtudiant(etudiantId: number, date?: string) {
+    return this.absenceService.getByEtudiant(etudiantId, date);
+  }
+
   create(payload: AbsenceCreateDto) {
     return this.absenceService.create(payload);
   }
@@ -19,8 +27,8 @@ export class AbsencesFacade {
     return this.absenceService.getMesAbsences();
   }
 
-  getMesJustifications() {
-    return this.absenceService.getMesJustifications();
+  getMesJustifications(filters?: { dateDebut?: string; dateFin?: string; statut?: string }) {
+    return this.absenceService.getMesJustifications(filters);
   }
 
   justify(payload: Justification) {
