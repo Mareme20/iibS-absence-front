@@ -2,149 +2,82 @@
 
 Frontend Angular de la plateforme IIBS Absence.
 
-## Objectif
-Application web pour:
-- authentification (`login/register`)
-- gestion académique (classes, professeurs, étudiants, cours)
-- gestion des absences et justifications
-- tableau de bord statistiques
-
 ## Stack
-- Angular 21 (standalone components)
+- Angular 21 (standalone)
 - Angular Material
 - RxJS
 - TypeScript
 
-## Prérequis
-- Node.js 20+
-- npm 10+
-
-## Installation
-```bash
-npm install
-```
-
-## Lancement en développement
+## Scripts
 ```bash
 npm start
+npm run build
+npm run build:vercel
+npm run watch
+npm test
+npm run test:unit
 ```
-
-Application disponible sur `http://localhost:4200`.
 
 ## Configuration API
-Fichiers:
-- `src/environments/environment.ts` (dev)
-- `src/environments/environment.prod.ts` (prod)
+Les services utilisent `environment.prod.ts`.
 
-Variable principale:
-- `apiUrl`
+Fichier:
+- `src/environments/environment.prod.ts`
 
-Exemple local:
+Variable:
 ```ts
-apiUrl: 'http://localhost:3000/api'
+apiUrl: 'https://.../api' // ou http://localhost:3000/api
 ```
 
-## Scripts utiles
-```bash
-npm start          # ng serve
-npm run build      # build production
-npm run build:vercel
-npm run watch      # build watch (dev)
-npm test
-```
-
-## Architecture actuelle
+## Architecture
 ```text
 src/app/
-├── application/
-│   └── facades/              # couche application (orchestration UI -> services)
+├── application/facades/
 ├── core/
 │   ├── guards/
-│   ├── interfaces/
 │   ├── interceptors/
 │   ├── models/
-│   └── services/             # accès API
-├── features/                 # pages métier
-└── shared/components/        # composants réutilisables
+│   ├── interfaces/
+│   └── services/
+├── features/
+└── shared/components/
 ```
 
-### Points clés d'architecture
-- séparation `services` (infrastructure HTTP) / `facades` (usage UI)
-- composants partagés pour réduire la duplication:
-  - `shared/components/page-header/page-header.ts`
-  - `shared/components/empty-state/empty-state.ts`
-- routes en lazy loading pour réduire le bundle initial
-- typage API via `ApiResponse<T>`
+## Routes principales
+- `/login`
+- `/register`
+- `/dashboard`
+- `/classes`
+- `/classes/etudiants` (classe + année académique => étudiants inscrits)
+- `/professeurs`
+- `/etudiants`
+- `/cours/planifier`
+- `/mes-cours`
+- `/absences/enregistrer`
+- `/absences/traiter-justifications`
+- `/mes-absences`
+- `/mes-justifications`
+- `/stats`
 
-## Routing
-Fichier: `src/app/app.routes.ts`
+## Points fonctionnels livrés
+- Cours d'un professeur limités à ses cours dans l'écran d'absence.
+- Classes limitées à celles du cours sélectionné.
+- État d'absence étudiant: non justifiée / en attente / refusée / justifiée.
+- Stats affichées avec nom/prénom (Top 5, >25h) avec fallback matricule.
+- Page dédiée: étudiants inscrits par classe et année académique.
 
-- routes publiques: `login`, `register`
-- routes protégées via `authGuard`
-- chargement lazy des pages
+## Tests
+### Unit
+`test:unit` couvre les utilitaires stats:
+- `src/app/features/stats/stats.utils.spec.ts`
 
-## Authentification
-- token JWT stocké via `TokenService`
-- injection du token via `authInterceptor`
-- rôles gérés côté UI:
-  - `RP`
-  - `PROF`
-  - `ATTACHE`
-  - `ETUDIANT`
-
-## Build production
+### Build
 ```bash
 npm run build
 ```
 
-Sortie:
-- `dist/iibs-absence-front/browser`
-
-## Docker
-Fichiers:
-- `Dockerfile`
-- `nginx.conf`
-
-Build et run:
-```bash
-docker build -t iibs-absence-front .
-docker run -p 8080:80 iibs-absence-front
-```
-
-Application: `http://localhost:8080`
-
-## Déploiement Vercel
-Fichier: `vercel.json`
-
-Commandes:
-```bash
-npm ci
-npm run build:vercel
-```
-
-Sur Vercel:
-1. définir la racine du projet sur `iibS-absence-front`
-2. garder les settings détectés (`vercel.json`)
-3. déployer
-
-## Performance
-- lazy loading activé
-- preloading des routes lazy activé (`PreloadAllModules`)
-- optimisation de rendu sur plusieurs écrans (suppression de duplications `async`, composants partagés)
-
-## Troubleshooting
-
-### Erreur CORS / API inaccessible
-- vérifier `environment.ts` et `environment.prod.ts`
-- vérifier que le backend tourne sur le bon port
-
-### Erreur 401/403
-- vérifier que le token JWT est présent/valide
-- vérifier le rôle utilisateur
-
-### Build échoue sur fonts Google
-- l'inlining des fonts est désactivé en production (`angular.json`)
-
-## Références
-- README racine: `../README.md`
-- backend: `../iibS-absence-back/README.md`
+## Déploiement
+### Vercel
+- connecter le repo front
+- vérifier `apiUrl` côté prod
+- push sur `main` => auto-deploy
